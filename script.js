@@ -1,13 +1,20 @@
 
 const scoreDisplay = document.querySelector('.current-score');
+const highScoreDisplay = document.querySelector('.high-score');
 const resetGame = document.querySelector('.reset-game');
+const gameContainer = document.querySelector('.game-container');
+const statusDisplay = document.querySelector('.status-display');
+const statusText = document.querySelector('.status-display-message');
+let gameWon = false;
 let clickedCard = null;
-let tries = 0;
 let preventClick = false;
+let highScore = 0;
+let score, playing;
 
 
 function updateScoreDisplay() {
-    scoreDisplay.innerText = tries;
+    scoreDisplay.innerText = score;
+    highScoreDisplay.innerText = highScore;
 }
 
 function flip(el) {
@@ -16,8 +23,7 @@ function flip(el) {
 }
 
 function createBoard() {
-
-    const gameContainer = document.querySelector('.game-container');
+    console.log('create');
     const order = [1,1,2,2,3,3,4,4,5,5,6,6];
     const randomOrder = [];
 
@@ -37,7 +43,28 @@ function createBoard() {
     }
 }
 
+function isGameWon() {
+    const cardHolders = (document.querySelectorAll('.card-holder'));
+
+    let correct = [];
+    cardHolders.forEach(el => correct.push(el.classList.contains('clicked')));
+    won = correct.reduce((a,b) => {
+       return a && b ? true : false;
+    })
+    
+    if(won) {
+        console.log('vinnare');
+        statusText.innerText = 'You won!';
+        statusDisplay.classList.remove('hide-status-display');
+
+        if(score > 0 && score > highScore) highScore = score;
+    }
+} 
+
 function init() {
+    score = 20;
+    playing = true;
+    if(!statusDisplay.classList.contains('hide-status-display')) statusDisplay.classList.add('hide-status-display'); 
     updateScoreDisplay();
     createBoard();
     const img = document.querySelectorAll('img');
@@ -49,36 +76,46 @@ function init() {
 
 function clickImage(image) {
 
-    if(!preventClick && image.classList.contains('hidden')) {
+    if(!preventClick && image.classList.contains('hidden') && playing) {
 
-    flip(image);
+        flip(image);
 
-    if(!clickedCard) {
-        clickedCard = image;
-    } else {
-        
-        let prevCard = clickedCard;
-        if(image.getAttribute('value') !== clickedCard.getAttribute('value')) {
+        if(!clickedCard) {
+            clickedCard = image;
+        } else {
+            
+            let prevCard = clickedCard;
+            if(image.getAttribute('value') !== clickedCard.getAttribute('value')) {
 
-            preventClick = true;
-            setTimeout(function() {
-                flip(image);
-                flip(prevCard);
-                preventClick = false;
-            }, 800);
-        } /* else {
-            console.log('samma');
-        } */
-        clickedCard = null;
-        tries++;
-        
-        updateScoreDisplay();
+                preventClick = true;
+                setTimeout(function() {
+                    flip(image);
+                    flip(prevCard);
+                    preventClick = false;
+                                  
+                }, 800);
+            } 
+            
+            clickedCard = null;
+
+
+            score--;
+            
+            if(score === 0) {
+                playing = false;
+                statusText.innerText = 'You loose....';
+                statusDisplay.classList.remove('hide-status-display');
+            }
+            
+            isGameWon();  
+            updateScoreDisplay();
+        }
     }
-}
 }
 
 resetGame.addEventListener('click', () => {
-    console.log('clikc');
+    const allCards = document.querySelectorAll('.card-holder');
+    allCards.forEach(el => el.parentNode.removeChild(el));
     init();
 });
 

@@ -6,4 +6,6 @@ I used the picturces from my photo-art series "Kontra" about me and my intimate 
 
 I watched some tutorials and then i got to work! I added the opportunity to play again and to keep a highscore that i learned when codeing a pig-game.
 
+Play the game here: https://tovebr.github.io/memory/
+
 Enjoy!

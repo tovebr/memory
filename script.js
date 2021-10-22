@@ -37,7 +37,7 @@ function createBoard() {
         const cardDiv = document.createElement('div');
         cardDiv.classList.add('card-holder');
 
-        cardDiv.innerHTML = `<img class="back" src="img/card-backside.jpg" alt=""><img class="front hidden" src="/img/${number}_kontra_Tove_Brandt.jpg" value="${number}" alt="">`;
+        cardDiv.innerHTML = `<img class="back" src="img/card-backside.jpg" alt=""><img class="front hidden" src="img/${number}_kontra_Tove_Brandt.jpg" value="${number}" alt="">`;
         /* cardDiv.innerHTML = card; */
         gameContainer.appendChild(cardDiv);
     }
